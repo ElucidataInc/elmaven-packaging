@@ -1,0 +1,12 @@
+<Installer>
+    <Name>El-Maven</Name>
+    <Version>0.2.4</Version>
+    <Title>El-Maven Installer</Title>
+    <Publisher>ElucidataInc</Publisher>
+    <ProductUrl>https://elucidatainc.github.io/ElMaven/</ProductUrl>
+    <InstallerApplicationIcon>maven</InstallerApplicationIcon>
+    <InstallerWindowIcon>window.png</InstallerWindowIcon>
+    <ControlScript>control_script.qs</ControlScript>
+    <WizardStyle>Modern</WizardStyle>
+    <TargetDir>@ApplicationsDir@/El-Maven</TargetDir>
+</Installer>
