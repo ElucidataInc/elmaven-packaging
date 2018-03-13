@@ -7,5 +7,6 @@
         <License file="license.txt" name="GPL Version 2" />
     </Licenses>
     <Default>true</Default>
+    <ForcedInstallation>true</ForcedInstallation>
     <Script>installerscript.qs</Script>
 </Package>
