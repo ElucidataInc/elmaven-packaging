@@ -1,0 +1,8 @@
+<Package>
+    <DisplayName>Nodejs</DisplayName>
+    <Version>8.10.0</Version>
+    <Default>true</Default>
+    <Script>install_node.qs</Script>
+    <ForcedInstallation>true</ForcedInstallation>
+    <ReleaseDate>2018-01-25</ReleaseDate>
+</Package>
