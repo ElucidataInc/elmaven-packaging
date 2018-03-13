@@ -25,7 +25,7 @@ MAVEN_BIN="$PARENT_DIR/maven_repo/ElMaven/bin/"
 BIN="$PARENT_DIR/bin/"
 MAVEN_REPO="https://github.com/ElucidataInc/ElMaven.git"
 NODE_MAC="$PARENT_DIR/node_mac/"
-NODE_WIN="$PARENT_DIR/node_win"
+NODE_WIN="$PARENT_DIR/node_win/"
 ARCHIVE_FILE="maven.7z"
 CONIFG="$PWD/config/"
 PACKAGE_DATA="$PWD/packages/com.vendor.product/data/"
@@ -154,7 +154,7 @@ copy_node()
 		cp -r $NODE_MAC $BIN
 
 	else
-		cp $NODE_WIN $BIN
+		cp -r $NODE_WIN/* $BIN
 
 	fi;
 
