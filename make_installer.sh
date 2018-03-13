@@ -24,6 +24,8 @@ MAVEN_SRC="$PARENT_DIR/maven_repo/ElMaven/"
 MAVEN_BIN="$PARENT_DIR/maven_repo/ElMaven/bin/"
 BIN="$PARENT_DIR/bin/"
 MAVEN_REPO="https://github.com/ElucidataInc/ElMaven.git"
+NODE_MAC="$PARENT_DIR/node_mac/"
+NODE_WIN="$PARENT_DIR/node_win"
 ARCHIVE_FILE="maven.7z"
 CONIFG="$PWD/config/"
 PACKAGE_DATA="$PWD/packages/com.vendor.product/data/"
@@ -146,6 +148,19 @@ collect_runtime_plugins()
 	return 0
 }
 
+copy_node()
+{
+	if [ $OS == "Darwin" ]; then
+		cp -r $NODE_MAC $BIN
+
+	else
+		cp $NODE_WIN $BIN
+
+	fi;
+
+	return 0
+}
+
 generate_archive()
 {
 	cd $PARENT_DIR
@@ -230,6 +245,15 @@ if [ $? != 0 ]; then
 	exit -1
 else
 	echo "collecting plugins $success"
+fi;
+
+
+copy_node
+if [ $? != 0 ]; then
+	echo "copying node $failed"
+	exit -1
+else
+	echo "copying node $success"
 fi;
 
 generate_archive
