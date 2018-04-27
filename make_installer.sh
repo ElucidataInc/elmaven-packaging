@@ -12,7 +12,7 @@ if [ $version == '' ]; then
 	exit -1
 fi;
 
-if [ $num_version == '' ]; then 
+if [ $num_version == '' ]; then
 	exit -1;
 fi;
 
@@ -26,6 +26,7 @@ BIN="$PARENT_DIR/bin/"
 MAVEN_REPO="https://github.com/ElucidataInc/ElMaven.git"
 NODE_MAC="$PARENT_DIR/node_mac/"
 NODE_WIN="$PARENT_DIR/node_win/"
+DOCKER_MAC="$PARENT_DIR/docker_dmg/"
 ARCHIVE_FILE="maven.7z"
 CONIFG="$PWD/config/"
 PACKAGE_DATA="$PWD/packages/com.vendor.product/data/"
@@ -107,16 +108,16 @@ collect_runtime_plugins()
 	cd $BIN
 	rm -rf *
 	cp -r $MAVEN_BIN* .
-	
+
 
 	if [ $OS == "Darwin" ]; then
 
 
 		macdeployqt El_Maven* peakdetector* CrashReporter* MavenTests* &>/dev/null
 
-		if [ $? != 0 ]; then 
+		if [ $? != 0 ]; then
 			return -1
-		fi; 
+		fi;
 
 	else
 		libs=$(ldd El_Maven*)
@@ -135,7 +136,7 @@ collect_runtime_plugins()
 		mv El_Maven* ElMaven.exe
 
 		windeployqt.exe --no-translations ElMaven.exe &>/dev/null
-		if [ $? != 0 ]; then 
+		if [ $? != 0 ]; then
 			return -1
 		fi;
 
@@ -159,6 +160,12 @@ copy_node()
 	fi;
 
 	return 0
+}
+
+copy_docker()
+{
+	cp $DOCKER_MAC/Docker.dmg $BIN
+	cp $DOCKER_MAC/install_docker.sh $BIN
 }
 
 generate_archive()
@@ -200,7 +207,7 @@ update_version()
 	cd $PARENT_DIR
 
 	python update_version.py $num_version
-	if [ $? != 0 ]; then 
+	if [ $? != 0 ]; then
 		return -1;
 	fi;
 
@@ -219,7 +226,7 @@ create_installer()
 	else
 		binarycreator -c config/config.xml -p packages/ $INSTALLER &>/dev/null
 		if [ $? != 0 ]; then
-			ERROR_MSG="Make sure binarycreator is in system path"			
+			ERROR_MSG="Make sure binarycreator is in system path"
 			return -1
 		fi;
 	fi;
@@ -256,6 +263,15 @@ else
 	echo "copying node $success"
 fi;
 
+copy_docker
+if [ $? != 0 ]; then
+	echo "copying docker $failed"
+	exit -1
+else
+	echo "copying docker $success"
+fi;
+
+
 generate_archive
 if [ $? != 0 ]; then
 	echo "generating the archive $failed"
@@ -279,4 +295,3 @@ if [ $? != 0 ]; then
 else
 	echo "creating the installer $success"
 fi;
-

@@ -1,0 +1,7 @@
+.DS_Store
+El-Maven-v0.2.4.3.app
+bin
+maven.7z
+maven_repo
+packages/com.vendor.product/data/
+Docker.dmg

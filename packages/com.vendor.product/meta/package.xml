@@ -1,7 +1,7 @@
 <Package>
-    <DisplayName>El-Maven 0.2.4</DisplayName>
-    <Description>Install El-Maven 0.2.4</Description>
-    <Version>0.2.4</Version>
+    <DisplayName>El-Maven 0.2.4.3</DisplayName>
+    <Description>Install El-Maven 0.2.4.3</Description>
+    <Version>0.2.4.3</Version>
     <ReleaseDate>2018-01-25</ReleaseDate>
     <Licenses>
         <License file="license.txt" name="GPL Version 2" />
