@@ -5,3 +5,4 @@ maven.7z
 maven_repo
 packages/com.vendor.product/data/
 Docker.dmg
+docker_dmg/*.dmg
