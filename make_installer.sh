@@ -44,7 +44,7 @@ clone()
 
 	cd $MAVEN_DIR
 	# will not clone if the repo is already present
-	git clone --quiet $MAVEN_REPO &>/dev/null
+	# git clone --quiet $MAVEN_REPO &>/dev/null
 
 }
 
@@ -58,23 +58,23 @@ compile()
 
 	cd $MAVEN_SRC
 
-	git checkout develop &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='checkout to develop failed. Make sure your working dir/staging area is clean'
-		return -1;
-	fi;
+	# git checkout develop &>/dev/null
+	# if [ $? != 0 ]; then
+	# 	ERROR_MSG='checkout to develop failed. Make sure your working dir/staging area is clean'
+	# 	return -1;
+	# fi;
 
-	git pull &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='git pull failed.'
-		return -1;
-	fi;
+	# git pull &>/dev/null
+	# if [ $? != 0 ]; then
+	# 	ERROR_MSG='git pull failed.'
+	# 	return -1;
+	# fi;
 
-	git checkout $version &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='git checkout failed. Make sure the the branch/version $version exists'
-		return -1;
-	fi;
+	# git checkout $version &>/dev/null
+	# if [ $? != 0 ]; then
+	# 	ERROR_MSG='git checkout failed. Make sure the the branch/version $version exists'
+	# 	return -1;
+	# fi;
 
 
 	./uninstall.sh &>/dev/null
@@ -166,6 +166,9 @@ copy_docker()
 {
 	cp $DOCKER_MAC/Docker.dmg $BIN
 	cp $DOCKER_MAC/install_docker.sh $BIN
+	cp $DOCKER_MAC/XQuartz-2.7.11.dmg $BIN
+	cp $DOCKER_MAC/install_xquartz.sh $BIN
+	cp $DOCKER_MAC/run_msconvert.sh $BIN
 }
 
 generate_archive()

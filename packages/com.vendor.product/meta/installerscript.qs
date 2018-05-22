@@ -12,6 +12,13 @@ Component.prototype.createOperationsForArchive = function(archive)
     // component.addOperation("Execute", "@TargetDir@" + "/" + installer.value("version") + "/bin/Docker.dmg");
     component.addElevatedOperation("Execute", "sudo", "chmod", "+x", "@TargetDir@" + "/" + installer.value("version") + "/bin/install_docker.sh");
     component.addElevatedOperation("Execute", "@TargetDir@" + "/" + installer.value("version") + "/bin/install_docker.sh", "@TargetDir@" + "/" + installer.value("version") + "/bin/Docker.dmg");
+
+    component.addElevatedOperation("Execute", "sudo", "chmod", "+x", "@TargetDir@" + "/" + installer.value("version") + "/bin/install_xquartz.sh");
+
+    component.addElevatedOperation("Execute", "@TargetDir@" + "/" + installer.value("version") + "/bin/install_xquartz.sh", "@TargetDir@" + "/" + installer.value("version") + "/bin/XQuartz-2.7.11.dmg");
+
+    component.addElevatedOperation("Execute", "sudo", "chmod", "+x", "@TargetDir@" + "/" + installer.value("version") + "/bin/run_msconvert.sh");
+
     // component.addElevatedOperation("Execute", "open", "/Applications/Docker.app", "--args", "-AppCommandLineArg");
     // component.addOperation("Execute", "docker", "pull", "kushalgupta/msconvert:0.2");
 }
