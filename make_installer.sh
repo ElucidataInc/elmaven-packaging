@@ -19,6 +19,7 @@ fi;
 
 OS=$(uname)
 PARENT_DIR=$PWD
+BREAKPAD_TOOLS=$PWD/breakpad_tools/
 MAVEN_DIR="$PARENT_DIR/maven_repo/"
 MAVEN_SRC="$PARENT_DIR/maven_repo/ElMaven/"
 MAVEN_BIN="$PARENT_DIR/maven_repo/ElMaven/bin/"
@@ -146,6 +147,17 @@ collect_runtime_plugins()
 	fi;
 
 	return 0
+}
+
+
+strip_upload_symbols()
+{
+	cd $BIN
+	$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS ElMaven.exe ElMaven
+	rm .*pdb
+	rm -r symbols
+
+
 }
 
 copy_node()

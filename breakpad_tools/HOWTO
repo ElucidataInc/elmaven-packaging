@@ -1,0 +1,14 @@
+Steps involved 
+
+1. build in debug mode
+2. strip symbols from binary using dump_syms tool
+3. upload symbol file on sentry using sentry-cli
+
+
+HOW TO DO IT
+
+1. using strip_symbols script
+
+	- cd into directory where strip_symbols script is present
+    - ./strip_symbols.sh  PATH_TO_MAVEN_SRC/bin/BINARY_NAME BINARY_NAME
+
