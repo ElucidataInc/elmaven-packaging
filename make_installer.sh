@@ -16,8 +16,22 @@ if [ $num_version == '' ]; then
 	exit -1;
 fi;
 
+WINDOWS=0
+MAC=0
+UNKNOWN_OS=0
+OS=$(echo $OSTYPE | tr '[:upper:]' '[:lower:]')
+if  [[ $OS == *"msys"* ]]; then
+	WINDOWS=1
 
-OS=$(uname)
+elif [[  $OS == *"darwrin"* ]]; then
+	MAC=1
+
+else
+	UNKOWN_OS=1
+
+fi;
+
+
 PARENT_DIR=$PWD
 BREAKPAD_TOOLS=$PWD/breakpad_tools/
 MAVEN_DIR="$PARENT_DIR/maven_repo/"
@@ -160,6 +174,7 @@ strip_upload_symbols()
 
 }
 
+
 copy_node()
 {
 	if [ $OS == "Darwin" ]; then
@@ -211,10 +226,31 @@ update_version()
 
 	cd $PARENT_DIR
 
-	python update_version.py $num_version
-	if [ $? != 0 ]; then 
-		return -1;
+
+	if [ $WINDOWS -eq 1 ]; then
+
+		if hash python.exe 2>/dev/null; then
+			python.exe update_version.py $num_version
+
+		elif hash python2.7.exe 2>/dev/null; then
+			python2.7.exe update_version.py $num_version
+
+		elif hash python3.6.exe 2>/dev/null; then
+			python3.6.exe update_version.py $num_version
+
+		else
+			echo "could not find python"
+			return -1;
+		fi;
+
+
 	fi;
+
+	if [ $? != 0 ]; then
+	       return -1;
+	fi;
+
+	return 0;
 
 }
 
@@ -291,4 +327,3 @@ if [ $? != 0 ]; then
 else
 	echo "creating the installer $success"
 fi;
-
