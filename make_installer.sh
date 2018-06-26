@@ -217,6 +217,7 @@ generate_archive()
 		fi;
 	fi;
 
+	mkdir $PACKAGE_DATA
 	cp $ARCHIVE_FILE $PACKAGE_DATA
 
 	return 0
