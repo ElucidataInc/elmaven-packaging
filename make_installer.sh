@@ -167,10 +167,12 @@ collect_runtime_plugins()
 strip_upload_symbols()
 {
 	cd $BIN
-	$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS ElMaven.exe ElMaven
-	rm .*pdb
-	rm -r symbols
-
+	echo "stripping symbols"
+	if [ $WINDOWS -eq 1 ]; then
+		$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS ElMaven.exe ElMaven
+		rm ElMaven.pdb
+		rm -r symbols
+       fi;
 
 }
 
@@ -287,6 +289,7 @@ else
 	echo "build $success"
 fi;
 
+
 collect_runtime_plugins
 if [ $? != 0 ]; then
 	echo "collecting plugins $failed"
@@ -294,6 +297,8 @@ if [ $? != 0 ]; then
 else
 	echo "collecting plugins $success"
 fi;
+
+strip_upload_symbols
 
 
 copy_node
