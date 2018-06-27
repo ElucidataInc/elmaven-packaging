@@ -127,7 +127,10 @@ collect_runtime_plugins()
 	if [ $OS == "Darwin" ]; then
 
 
-		macdeployqt El_Maven* peakdetector* CrashReporter* MavenTests* &>/dev/null
+		macdeployqt El_Maven* &>/dev/null
+		macdeployqt peakdetector* &>/dev/null
+		macdeployqt CrashReporter* &>/dev/null
+		macdeployqt MavenTests* &>/dev/null
 
 		if [ $? != 0 ]; then 
 			return -1
