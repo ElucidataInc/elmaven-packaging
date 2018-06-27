@@ -122,10 +122,8 @@ collect_runtime_plugins()
 	cd $BIN
 	rm -rf *
 	cp -r $MAVEN_BIN* .
-	
 
-	if [ $OS == "Darwin" ]; then
-
+	if [ $MAC -eq 1 ]; then
 
 		macdeployqt El_Maven* &>/dev/null
 		macdeployqt peakdetector* &>/dev/null
@@ -134,9 +132,11 @@ collect_runtime_plugins()
 
 		if [ $? != 0 ]; then 
 			return -1
-		fi; 
+		fi;
+	fi;
 
-	else
+	if [ $WINDOWS -eq 1 ]; then
+
 		libs=$(ldd El_Maven*)
 		if [ $? != 0 ]; then
 			return -1
@@ -171,21 +171,29 @@ strip_upload_symbols()
 {
 	cd $BIN
 	echo "stripping symbols"
+
 	if [ $WINDOWS -eq 1 ]; then
 		$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS ElMaven.exe ElMaven
 		rm ElMaven.pdb
 		rm -r symbols
-       fi;
+	fi;
 
+	if [ $MAC -eq 1 ]; then
+		bin_path=$(find . -name "El_Maven*" -maxdepth 1 -print | ggrep -o "El_Maven.*")
+		echo "binary path : $bin_path"
+		bin_name=$(echo $bin_path | ggrep -o -P ".*(?=.app)")
+		$BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "$bin_path/Contents/MacOS/$bin_name" $bin_name
+	fi;
 }
 
 
 copy_node()
 {
-	if [ $OS == "Darwin" ]; then
+	if [ $MAC -eq 1 ]; then
 		cp -r $NODE_MAC $BIN
+	fi;
 
-	else
+	if [ $WINDOWS -eq 1 ]; then
 		cp -r $NODE_WIN/* $BIN
 
 	fi;
@@ -207,13 +215,15 @@ generate_archive()
 	fi;
 
 
-	if [ $OS == "Darwin" ]; then
+	if [ $MAC -eq 1 ]; then
 		archivegen $ARCHIVE_FILE $BIN &>/dev/null
 		if [ $? != 0 ]; then
 			ERROR_MSG="Make sure archivegen is in system path"
 			return -1
 		fi;
-	else
+	fi;
+
+	if [ $WINDOWS -eq 1 ]; then
 		archivegen.exe $ARCHIVE_FILE $BIN &>/dev/null
 		if [ $? != 0 ]; then
 			return -1
@@ -232,6 +242,9 @@ update_version()
 
 	cd $PARENT_DIR
 
+	if [ $MAC -eq 1 ]; then 
+		python update_version.py $num_version
+	fi;
 
 	if [ $WINDOWS -eq 1 ]; then
 
@@ -264,13 +277,15 @@ create_installer()
 {
 	cd $PARENT_DIR
 
-	if [ $OS == "Darwin" ]; then
+	if [ $MAC -eq 1 ]; then
 		binarycreator --ignore-translations -c config/config.xml -p packages/ $INSTALLER &>/dev/null
 		if [ $? != 0 ]; then
 			ERROR_MSG="Make sure binarycreator is in system path"
 			return -1
 		fi;
-	else
+	fi;
+
+	if [ $WINDOWS -eq 1 ]; then 
 		binarycreator -c config/config.xml -p packages/ $INSTALLER &>/dev/null
 		if [ $? != 0 ]; then
 			ERROR_MSG="Make sure binarycreator is in system path"			
@@ -293,7 +308,6 @@ else
 	echo "build $success"
 fi;
 
-
 collect_runtime_plugins
 if [ $? != 0 ]; then
 	echo "collecting plugins $failed"
@@ -302,8 +316,8 @@ else
 	echo "collecting plugins $success"
 fi;
 
-strip_upload_symbols
 
+strip_upload_symbols
 
 copy_node
 if [ $? != 0 ]; then
