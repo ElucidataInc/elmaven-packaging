@@ -23,7 +23,7 @@ OS=$(echo $OSTYPE | tr '[:upper:]' '[:lower:]')
 if  [[ $OS == *"msys"* ]]; then
 	WINDOWS=1
 
-elif [[  $OS == *"darwrin"* ]]; then
+elif [[  $OS == *"darwin"* ]]; then
 	MAC=1
 
 else
