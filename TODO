@@ -1,0 +1,3 @@
+- display at what stage the installer is
+- display what branch the installer is being build for 
+- use a log file and store the output/error of commands in that file
