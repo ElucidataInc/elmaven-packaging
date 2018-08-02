@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=elmaven
+Exec=elmaven %F
+Type=Application
+Icon=elmaven
+Categories=Science
+
