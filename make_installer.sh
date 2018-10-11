@@ -137,7 +137,7 @@ collect_runtime_plugins()
 
 	if [ $WINDOWS -eq 1 ]; then
 
-		libs=$(ldd El_Maven*)
+		libs=$(ldd El_Maven* peakdetector.exe)
 		if [ $? != 0 ]; then
 			return -1
 		fi;
