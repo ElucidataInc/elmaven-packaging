@@ -368,8 +368,8 @@ fi;
 
 codesign_installer
 if [ $? != 0 ]; then
-	echo "creating the installer $failed"
+	echo "codesigning the installer $failed"
 	exit -1
 else
-	echo "creating the installer $success"
+	echo "codesigning the installer $success"
 fi;
