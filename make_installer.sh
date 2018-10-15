@@ -297,6 +297,21 @@ create_installer()
 
 }
 
+codesign_installer()
+{
+	cd $PARENT_DIR
+
+	if [ $MAC -eq 1 ]; then
+		codesign -s "Elucidata Corporation" $INSTALLER.app &> /dev/null
+		if [ $? != 0 ]; then
+			ERROR_MSG="Make sure that the certificate name is correct"
+			return -1
+		fi;
+	fi;
+
+	return 0
+}
+
 clone
 
 compile
@@ -344,6 +359,14 @@ else
 fi;
 
 create_installer
+if [ $? != 0 ]; then
+	echo "creating the installer $failed"
+	exit -1
+else
+	echo "creating the installer $success"
+fi;
+
+codesign_installer
 if [ $? != 0 ]; then
 	echo "creating the installer $failed"
 	exit -1
