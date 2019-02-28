@@ -156,10 +156,22 @@ collect_runtime_plugins()
 
 		mv El_Maven* ElMaven.exe
 
-		windeployqt.exe --no-translations ElMaven.exe &>/dev/null
-		if [ $? != 0 ]; then 
-			return -1
-		fi;
+
+                # since Qt5.9.7, windeployqt has stopped working. Going to use some copy paste magic instead
+                # to get all the extra plugins required.
+
+                qt_plugins_path=$(qmake -query QT_INSTALL_PLUGINS)
+                echo $qt_plugins_path
+
+                cp -r "$qt_plugins_path/platforms" .
+                cp -r "$qt_plugins_path/imageformats" .
+                cp -r "$qt_plugins_path/printsupport" .
+                cp -r "$qt_plugins_path/sqldrivers" .
+                cp -r "$qt_plugins_path/bearer" .
+                #windeployqt.exe --no-translations ElMaven.exe &>/dev/null
+                #if [ $? != 0 ]; then
+                #	return -1
+                #fi;
 
 		#generate qt.conf
 		touch qt.conf
