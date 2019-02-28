@@ -95,7 +95,7 @@ compile()
 
 	find . -name "Makefile" -delete
 
-	qmake CONFIG+=debug &>/dev/null
+	qmake CONFIG+=release CONFIG+=force_debug_info &>/dev/null
 	if [ $? != 0 ]; then
 		ERROR_MSG='qmake failed. Make sure it is in system path'
 		return -1
