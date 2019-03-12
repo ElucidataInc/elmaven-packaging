@@ -131,9 +131,9 @@ collect_runtime_plugins()
         dsymutil "$bin_path/Contents/MacOS/$bin_name" -o "$bin_name.dSYM" 
 		macdeployqt El_Maven* &>/dev/null
 		macdeployqt peakdetector* &>/dev/null
-		macdeployqt CrashReporter* &>/dev/null
+		macdeployqt crashreporter* &>/dev/null
 		macdeployqt MavenTests* &>/dev/null
-
+        install_name_tool -add_rpath @executable_path/../Frameworks "$bin_path/Contents/MacOS/crashserver"
 		if [ $? != 0 ]; then 
 			return -1
 		fi;
