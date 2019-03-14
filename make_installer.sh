@@ -60,6 +60,12 @@ clone()
 	# will not clone if the repo is already present
 	git clone --quiet $MAVEN_REPO &>/dev/null
 
+        if [ ! -f $PARENT_DIR/keys ]; then
+		ERROR_MSG='keys file not found. Crash Reporter will not work without the keys file'
+		return -1;
+	fi;
+
+	cp $PARENT_DIR/keys $MAVEN_SRC/
 }
 
 compile()
@@ -329,6 +335,12 @@ codesign_installer()
 }
 
 clone
+if [ $? != 0 ]; then
+	echo "ERROR: $ERROR_MSG"
+	exit -1
+else
+	echo "clone $success"
+fi;
 
 compile
 if [ $? != 0 ]; then
