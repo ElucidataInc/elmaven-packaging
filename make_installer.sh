@@ -121,7 +121,7 @@ collect_runtime_plugins()
 
 	cd $BIN
 	rm -rf *
-	cp -r $MAVEN_BIN* .
+	rsync -av $MAVEN_BIN . --exclude "linux"
 
 	if [ $MAC -eq 1 ]; then
 
