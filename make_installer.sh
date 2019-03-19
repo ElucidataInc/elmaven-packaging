@@ -121,7 +121,14 @@ collect_runtime_plugins()
 
 	cd $BIN
 	rm -rf *
-	rsync -av $MAVEN_BIN . --exclude "linux"
+
+    if [ $WINDOWS -eq 1 ]; then
+        rsync -av --progress --exclude 'linux' --exclude 'node' --exclude 'node_bin'  --exclude 'node.exe' $MAVEN_BIN .
+    fi;
+
+    if [ $MAC -eq 1 ]; then
+        rsync -av --progress --exclude 'windows' --exclude 'linux' --exclude 'node' --exclude 'node_bin'  --exclude 'node.exe' $MAVEN_BIN .
+    fi;
 
 	if [ $MAC -eq 1 ]; then
 
@@ -199,6 +206,7 @@ strip_upload_symbols()
 		echo "binary path : $bin_path"
 		bin_name=$(echo $bin_path | ggrep -o -P ".*(?=.app)")
 		$BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "$bin_path/Contents/MacOS/$bin_name" $bin_name
+        rm -r *.dSYM
 	fi;
 }
 
