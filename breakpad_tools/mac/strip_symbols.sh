@@ -14,4 +14,4 @@ mkdir -p ../symbols/$binary_name/$uuid/
 mv $symbol_file ../symbols/$binary_name/$uuid/
 
 
-$breakpad_path/mac/sentry-cli --auth-token 00985397724343d496af4d0f88dd8c79adc5f7a5433b4ed9881b9535d0bc5eb4 upload-dif -t breakpad --project el-maven-logging --org test-acc ../symbols/
+$breakpad_path/mac/sentry-cli --auth-token 00985397724343d496af4d0f88dd8c79adc5f7a5433b4ed9881b9535d0bc5eb4 upload-dif -t breakpad --project el-maven-logging --org el-maven ../symbols/
