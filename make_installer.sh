@@ -9,11 +9,11 @@ read -p "enter the version number : " num_version
 
 # TODO: use a regex instead
 if [ $version == '' ]; then
-	exit -1
+    exit -1
 fi;
 
 if [ $num_version == '' ]; then 
-	exit -1;
+    exit -1;
 fi;
 
 WINDOWS=0
@@ -21,13 +21,13 @@ MAC=0
 UNKNOWN_OS=0
 OS=$(echo $OSTYPE | tr '[:upper:]' '[:lower:]')
 if  [[ $OS == *"msys"* ]]; then
-	WINDOWS=1
+    WINDOWS=1
 
 elif [[  $OS == *"darwin"* ]]; then
-	MAC=1
+    MAC=1
 
 else
-	UNKOWN_OS=1
+    UNKOWN_OS=1
 
 fi;
 
@@ -52,81 +52,81 @@ ERROR_MSG=''
 
 clone()
 {
-	if [ ! -d $MAVEN_DIR ]; then
-		mkdir $MAVEN_DIR
-	fi;
+    if [ ! -d $MAVEN_DIR ]; then
+        mkdir $MAVEN_DIR
+    fi;
 
-	cd $MAVEN_DIR
-	# will not clone if the repo is already present
-	git clone --quiet $MAVEN_REPO &>/dev/null
+    cd $MAVEN_DIR
+    # will not clone if the repo is already present
+    git clone --quiet $MAVEN_REPO &>/dev/null
 
-        if [ ! -f $PARENT_DIR/keys ]; then
-		ERROR_MSG='keys file not found. Crash Reporter will not work without the keys file'
-		return -1;
-	fi;
+    if [ ! -f $PARENT_DIR/keys ]; then
+        ERROR_MSG='keys file not found. Crash Reporter will not work without the keys file'
+        return -1;
+    fi;
 
-	cp $PARENT_DIR/keys $MAVEN_SRC/
+    cp $PARENT_DIR/keys $MAVEN_SRC/
 }
 
 compile()
 {
-	# the source repo does not exist. This might happen if cloning
-	# of repo failed
-	if [ ! -d $MAVEN_SRC ]; then
-		return -1
-	fi;
+    # the source repo does not exist. This might happen if cloning
+    # of repo failed
+    if [ ! -d $MAVEN_SRC ]; then
+        return -1
+    fi;
 
-	cd $MAVEN_SRC
+    cd $MAVEN_SRC
 
-	git checkout develop &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='checkout to develop failed. Make sure your working dir/staging area is clean'
-		return -1;
-	fi;
+    git checkout develop &>/dev/null
+    if [ $? != 0 ]; then
+        ERROR_MSG='checkout to develop failed. Make sure your working dir/staging area is clean'
+        return -1;
+    fi;
 
-	git pull &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='git pull failed.'
-		return -1;
-	fi;
+    git pull &>/dev/null
+    if [ $? != 0 ]; then
+        ERROR_MSG='git pull failed.'
+        return -1;
+    fi;
 
-	git checkout $version &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='git checkout failed. Make sure the the branch/version $version exists'
-		return -1;
-	fi;
+    git checkout $version &>/dev/null
+    if [ $? != 0 ]; then
+        ERROR_MSG='git checkout failed. Make sure the the branch/version $version exists'
+        return -1;
+    fi;
 
 
-	./uninstall.sh &>/dev/null
+    ./uninstall.sh &>/dev/null
 
-	find . -name "Makefile" -delete
+    find . -name "Makefile" -delete
 
-	qmake CONFIG+=release CONFIG+=force_debug_info NOTESTS=yes &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG='qmake failed. Make sure it is in system path'
-		return -1
-	fi;
+    qmake CONFIG+=release CONFIG+=force_debug_info NOTESTS=yes &>/dev/null
+    if [ $? != 0 ]; then
+        ERROR_MSG='qmake failed. Make sure it is in system path'
+        return -1
+    fi;
 
-	echo "building ......."
-	make --silent -j4 &>/dev/null
-	if [ $? != 0 ]; then
-		ERROR_MSG="make failed"
-		return -1
-	fi;
+    echo "building ......."
+    make --silent -j4 &>/dev/null
+    if [ $? != 0 ]; then
+        ERROR_MSG="make failed"
+        return -1
+    fi;
 
-	return 0
+    return 0
 }
 
 collect_runtime_plugins()
 {
-	cd $PARENT_DIR
+    cd $PARENT_DIR
 
-	if [ ! -d $BIN ]; then
-		mkdir $BIN
-	fi;
+    if [ ! -d $BIN ]; then
+        mkdir $BIN
+    fi;
 
-	cd $BIN
-	rm -rf *
+    cd $BIN
+    rm -rf *
 
     if [ $WINDOWS -eq 1 ]; then
         rsync -av --progress --exclude 'linux' --exclude 'node' --exclude 'node_bin'  --exclude 'node.exe' $MAVEN_BIN .
@@ -136,225 +136,218 @@ collect_runtime_plugins()
         rsync -av --progress --exclude 'windows' --exclude 'linux' --exclude 'node' --exclude 'node_bin'  --exclude 'node.exe' $MAVEN_BIN .
     fi;
 
-	if [ $MAC -eq 1 ]; then
+    if [ $MAC -eq 1 ]; then
+
 
         #prepare dSYM file
         dsymutil "El-MAVEN.app/Contents/MacOS/El-MAVEN" -o "El-MAVEN.dSYM"
-		macdeployqt El-MAVEN.app &>/dev/null
-		macdeployqt peakdetector.app &>/dev/null
-		macdeployqt crashreporter.app &>/dev/null
+        macdeployqt El-MAVEN.app &>/dev/null
+        macdeployqt peakdetector.app &>/dev/null
+        macdeployqt crashreporter.app &>/dev/null
         install_name_tool -add_rpath @executable_path/../Frameworks "El-MAVEN.app/Contents/MacOS/crashserver"
-		if [ $? != 0 ]; then 
-			return -1
-		fi;
-	fi;
+        if [ $? != 0 ]; then
+            return -1
+        fi;
+    fi;
 
-	if [ $WINDOWS -eq 1 ]; then
+    if [ $WINDOWS -eq 1 ]; then
 
-		libs=$(ldd El-MAVEN.exe peakdetector.exe)
-		if [ $? != 0 ]; then
-			return -1
-		fi;
+        libs=$(ldd El-MAVEN.exe peakdetector.exe)
+        if [ $? != 0 ]; then
+            return -1
+        fi;
 
-		while read -r line; do
-    		lib=$(echo $line | sed -n 's/.*=>\s*\(.*dll\).*/\1/p')
-    		if [[ $lib == *"bin"* ]]; then
-        		cp $lib $BIN
-    		fi;
-		done <<< "$libs"
+        while read -r line; do
+            lib=$(echo $line | sed -n 's/.*=>\s*\(.*dll\).*/\1/p')
+            if [[ $lib == *"bin"* ]]; then
+                cp $lib $BIN
+            fi;
+        done <<< "$libs"
 
 
-                # since Qt5.9.7, windeployqt has stopped working. Going to use some copy paste magic instead
-                # to get all the extra plugins required.
+        # since Qt5.9.7, windeployqt has stopped working. Going to use some copy paste magic instead
+        # to get all the extra plugins required.
 
-                qt_plugins_path=$(qmake -query QT_INSTALL_PLUGINS)
-                echo $qt_plugins_path
+        qt_plugins_path=$(qmake -query QT_INSTALL_PLUGINS)
+        echo $qt_plugins_path
 
-                cp -r "$qt_plugins_path/platforms" .
-                cp -r "$qt_plugins_path/imageformats" .
-                cp -r "$qt_plugins_path/printsupport" .
-                cp -r "$qt_plugins_path/sqldrivers" .
-                cp -r "$qt_plugins_path/bearer" .
-                #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
-                #if [ $? != 0 ]; then
-                #	return -1
-                #fi;
+        cp -r "$qt_plugins_path/platforms" .
+        cp -r "$qt_plugins_path/imageformats" .
+        cp -r "$qt_plugins_path/printsupport" .
+        cp -r "$qt_plugins_path/sqldrivers" .
+        cp -r "$qt_plugins_path/bearer" .
+        #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
+        #if [ $? != 0 ]; then
+        #       return -1
+        #fi;
 
-		#generate qt.conf
-		touch qt.conf
-		echo "[Paths]\nPrefix = .\n" > qt.conf
+        #generate qt.conf
+        touch qt.conf
+        echo "[Paths]\nPrefix = .\n" > qt.conf
+    fi;
 
-	fi;
-
-	return 0
+    return 0
 }
 
 
 strip_upload_symbols()
 {
-	cd $BIN
-	echo "stripping symbols"
+    cd $BIN
+    echo "stripping symbols"
 
-	if [ $WINDOWS -eq 1 ]; then
-		$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS El-MAVEN.exe El-MAVEN
-		rm El-MAVEN.pdb
-	fi;
+    if [ $WINDOWS -eq 1 ]; then
+        $BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS El-MAVEN.exe El-MAVEN
+        rm El-MAVEN.pdb
+    fi;
 
-	if [ $MAC -eq 1 ]; then
-		$BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "El-MAVEN.app/Contents/MacOS/El-MAVEN" El-MAVEN
+    if [ $MAC -eq 1 ]; then
+        $BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "El-MAVEN.app/Contents/MacOS/El-MAVEN" El-MAVEN
         rm -r *.dSYM
-	fi;
+    fi;
 }
 
 
 copy_node()
 {
-	if [ $MAC -eq 1 ]; then
-		cp -r $NODE_MAC $BIN
-	fi;
+    if [ $MAC -eq 1 ]; then
+        cp -r $NODE_MAC $BIN
+    fi;
 
-	if [ $WINDOWS -eq 1 ]; then
-		cp -r $NODE_WIN/* $BIN
+    if [ $WINDOWS -eq 1 ]; then
+        cp -r $NODE_WIN/* $BIN
+    fi;
 
-	fi;
-
-	return 0
+    return 0
 }
 
 generate_archive()
 {
-	cd $PARENT_DIR
+    cd $PARENT_DIR
 
-	if [ -f $ARCHIVE_FILE ]; then
-		rm $ARCHIVE_FILE
-	fi;
+    if [ -f $ARCHIVE_FILE ]; then
+        rm $ARCHIVE_FILE
+    fi;
 
+    if [ -f $PACKAGE_DATA/$ARCHIVE_FILE ]; then
+        rm $PACKAGE_DATA/$ARCHIVE_FILE
+    fi;
 
-	if [ -f $PACKAGE_DATA/$ARCHIVE_FILE ]; then
-		rm $PACKAGE_DATA/$ARCHIVE_FILE
-	fi;
+    if [ $MAC -eq 1 ]; then
+        archivegen $ARCHIVE_FILE $BIN &>/dev/null
+        if [ $? != 0 ]; then
+            ERROR_MSG="Make sure archivegen is in system path"
+            return -1
+        fi;
+    fi;
 
+    if [ $WINDOWS -eq 1 ]; then
+        archivegen.exe $ARCHIVE_FILE $BIN &>/dev/null
+        if [ $? != 0 ]; then
+                return -1
+        fi;
+    fi;
 
-	if [ $MAC -eq 1 ]; then
-		archivegen $ARCHIVE_FILE $BIN &>/dev/null
-		if [ $? != 0 ]; then
-			ERROR_MSG="Make sure archivegen is in system path"
-			return -1
-		fi;
-	fi;
+    mkdir $PACKAGE_DATA
+    cp $ARCHIVE_FILE $PACKAGE_DATA
 
-	if [ $WINDOWS -eq 1 ]; then
-		archivegen.exe $ARCHIVE_FILE $BIN &>/dev/null
-		if [ $? != 0 ]; then
-			return -1
-		fi;
-	fi;
-
-	mkdir $PACKAGE_DATA
-	cp $ARCHIVE_FILE $PACKAGE_DATA
-
-	return 0
+    return 0
 }
 
 
 update_version()
 {
+    cd $PARENT_DIR
 
-	cd $PARENT_DIR
+    if [ $MAC -eq 1 ]; then
+        python update_version.py $num_version
+    fi;
 
-	if [ $MAC -eq 1 ]; then 
-		python update_version.py $num_version
-	fi;
+    if [ $WINDOWS -eq 1 ]; then
 
-	if [ $WINDOWS -eq 1 ]; then
+        if hash python.exe 2>/dev/null; then
+            python.exe update_version.py $num_version
 
-		if hash python.exe 2>/dev/null; then
-			python.exe update_version.py $num_version
+        elif hash python2.7.exe 2>/dev/null; then
+            python2.7.exe update_version.py $num_version
 
-		elif hash python2.7.exe 2>/dev/null; then
-			python2.7.exe update_version.py $num_version
+        elif hash python3.6.exe 2>/dev/null; then
+            python3.6.exe update_version.py $num_version
 
-		elif hash python3.6.exe 2>/dev/null; then
-			python3.6.exe update_version.py $num_version
+        else
+            echo "could not find python"
+            return -1;
+        fi;
+    fi;
 
-		else
-			echo "could not find python"
-			return -1;
-		fi;
+    if [ $? != 0 ]; then
+       return -1;
+    fi;
 
-
-	fi;
-
-	if [ $? != 0 ]; then
-	       return -1;
-	fi;
-
-	return 0;
+    return 0;
 
 }
 
 create_installer()
 {
-	cd $PARENT_DIR
+    cd $PARENT_DIR
 
-	if [ $MAC -eq 1 ]; then
-		binarycreator --ignore-translations -c config/config.xml -p packages/ $INSTALLER &>/dev/null
-		if [ $? != 0 ]; then
-			ERROR_MSG="Make sure binarycreator is in system path"
-			return -1
-		fi;
-	fi;
+    if [ $MAC -eq 1 ]; then
+        binarycreator --ignore-translations -c config/config.xml -p packages/ $INSTALLER &>/dev/null
+        if [ $? != 0 ]; then
+            ERROR_MSG="Make sure binarycreator is in system path"
+            return -1
+        fi;
+    fi;
 
-	if [ $WINDOWS -eq 1 ]; then 
-		binarycreator -c config/config.xml -p packages/ $INSTALLER &>/dev/null
-		if [ $? != 0 ]; then
-			ERROR_MSG="Make sure binarycreator is in system path"			
-			return -1
-		fi;
-	fi;
+    if [ $WINDOWS -eq 1 ]; then
+        binarycreator -c config/config.xml -p packages/ $INSTALLER &>/dev/null
+        if [ $? != 0 ]; then
+            ERROR_MSG="Make sure binarycreator is in system path"
+            return -1
+        fi;
+    fi;
 
-	return 0
+        return 0
 
 }
 
 codesign_installer()
 {
-	cd $PARENT_DIR
+    cd $PARENT_DIR
 
-	if [ $MAC -eq 1 ]; then
-		codesign -s "Elucidata Corporation" $INSTALLER.app &> /dev/null
-		if [ $? != 0 ]; then
-			ERROR_MSG="Make sure that the certificate name is correct"
-			return -1
-		fi;
-	fi;
-
-	return 0
+    if [ $MAC -eq 1 ]; then
+        codesign -s "Elucidata Corporation" $INSTALLER.app &> /dev/null
+        if [ $? != 0 ]; then
+            ERROR_MSG="Make sure that the certificate name is correct"
+            return -1
+        fi;
+    fi;
+    return 0
 }
 
 clone
 if [ $? != 0 ]; then
-	echo "ERROR: $ERROR_MSG"
-	exit -1
+    echo "ERROR: $ERROR_MSG"
+    exit -1
 else
-	echo "clone $success"
+    echo "clone $success"
 fi;
 
 compile
 if [ $? != 0 ]; then
-	echo "build $failed "
-	echo "Log: $ERROR_MSG"
-	exit -1
+    echo "build $failed "
+    echo "Log: $ERROR_MSG"
+    exit -1
 else
-	echo "build $success"
+    echo "build $success"
 fi;
 
 collect_runtime_plugins
 if [ $? != 0 ]; then
-	echo "collecting plugins $failed"
-	exit -1
+    echo "collecting plugins $failed"
+    exit -1
 else
-	echo "collecting plugins $success"
+    echo "collecting plugins $success"
 fi;
 
 
@@ -362,40 +355,40 @@ strip_upload_symbols
 
 copy_node
 if [ $? != 0 ]; then
-	echo "copying node $failed"
-	exit -1
+    echo "copying node $failed"
+    exit -1
 else
-	echo "copying node $success"
+    echo "copying node $success"
 fi;
 
 generate_archive
 if [ $? != 0 ]; then
-	echo "generating the archive $failed"
-	exit -1
+    echo "generating the archive $failed"
+    exit -1
 else
-	echo "generating the archive $success"
+    echo "generating the archive $success"
 fi;
 
 update_version
 if [ $? != 0 ]; then
-	echo "updating the version $failed"
-	exit -1
+    echo "updating the version $failed"
+    exit -1
 else
-	echo "updating the version $success"
+    echo "updating the version $success"
 fi;
 
 create_installer
 if [ $? != 0 ]; then
-	echo "creating the installer $failed"
-	exit -1
+    echo "creating the installer $failed"
+    exit -1
 else
-	echo "creating the installer $success"
+    echo "creating the installer $success"
 fi;
 
 codesign_installer
 if [ $? != 0 ]; then
-	echo "codesigning the installer $failed"
-	exit -1
+    echo "codesigning the installer $failed"
+    exit -1
 else
-	echo "codesigning the installer $success"
+    echo "codesigning the installer $success"
 fi;
