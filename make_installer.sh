@@ -143,7 +143,6 @@ collect_runtime_plugins()
 		macdeployqt El-MAVEN.app &>/dev/null
 		macdeployqt peakdetector.app &>/dev/null
 		macdeployqt crashreporter.app &>/dev/null
-		macdeployqt MavenTests.app &>/dev/null
         install_name_tool -add_rpath @executable_path/../Frameworks "El-MAVEN.app/Contents/MacOS/crashserver"
 		if [ $? != 0 ]; then 
 			return -1
