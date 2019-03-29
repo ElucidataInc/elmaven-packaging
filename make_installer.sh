@@ -139,14 +139,12 @@ collect_runtime_plugins()
 	if [ $MAC -eq 1 ]; then
 
         #prepare dSYM file
-		bin_path=$(find . -name "El_Maven*" -maxdepth 1 -print | ggrep -o "El_Maven.*")
-		bin_name=$(echo $bin_path | ggrep -o -P ".*(?=.app)")
-        dsymutil "$bin_path/Contents/MacOS/$bin_name" -o "$bin_name.dSYM" 
-		macdeployqt El_Maven* &>/dev/null
-		macdeployqt peakdetector* &>/dev/null
-		macdeployqt crashreporter* &>/dev/null
-		macdeployqt MavenTests* &>/dev/null
-        install_name_tool -add_rpath @executable_path/../Frameworks "$bin_path/Contents/MacOS/crashserver"
+        dsymutil "El-MAVEN.app/Contents/MacOS/El-MAVEN" -o "El-MAVEN.dSYM"
+		macdeployqt El-MAVEN.app &>/dev/null
+		macdeployqt peakdetector.app &>/dev/null
+		macdeployqt crashreporter.app &>/dev/null
+		macdeployqt MavenTests.app &>/dev/null
+        install_name_tool -add_rpath @executable_path/../Frameworks "El-MAVEN.app/Contents/MacOS/crashserver"
 		if [ $? != 0 ]; then 
 			return -1
 		fi;
@@ -208,10 +206,7 @@ strip_upload_symbols()
 	fi;
 
 	if [ $MAC -eq 1 ]; then
-		bin_path=$(find . -name "El_Maven*.app" -maxdepth 1 -print | ggrep -o "El_Maven.*")
-		echo "binary path : $bin_path"
-		bin_name=$(echo $bin_path | ggrep -o -P ".*(?=.app)")
-		$BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "$bin_path/Contents/MacOS/$bin_name" $bin_name
+		$BREAKPAD_TOOLS/mac/strip_symbols.sh $BREAKPAD_TOOLS "El-MAVEN.app/Contents/MacOS/El-MAVEN" El-MAVEN
         rm -r *.dSYM
 	fi;
 }
