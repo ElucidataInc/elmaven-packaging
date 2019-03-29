@@ -60,6 +60,12 @@ clone()
 	# will not clone if the repo is already present
 	git clone --quiet $MAVEN_REPO &>/dev/null
 
+        if [ ! -f $PARENT_DIR/keys ]; then
+		ERROR_MSG='keys file not found. Crash Reporter will not work without the keys file'
+		return -1;
+	fi;
+
+	cp $PARENT_DIR/keys $MAVEN_SRC/
 }
 
 compile()
@@ -138,9 +144,9 @@ collect_runtime_plugins()
         dsymutil "$bin_path/Contents/MacOS/$bin_name" -o "$bin_name.dSYM" 
 		macdeployqt El_Maven* &>/dev/null
 		macdeployqt peakdetector* &>/dev/null
-		macdeployqt CrashReporter* &>/dev/null
+		macdeployqt crashreporter* &>/dev/null
 		macdeployqt MavenTests* &>/dev/null
-
+        install_name_tool -add_rpath @executable_path/../Frameworks "$bin_path/Contents/MacOS/crashserver"
 		if [ $? != 0 ]; then 
 			return -1
 		fi;
@@ -337,6 +343,12 @@ codesign_installer()
 }
 
 clone
+if [ $? != 0 ]; then
+	echo "ERROR: $ERROR_MSG"
+	exit -1
+else
+	echo "clone $success"
+fi;
 
 compile
 if [ $? != 0 ]; then
