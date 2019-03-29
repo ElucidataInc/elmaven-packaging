@@ -151,7 +151,7 @@ collect_runtime_plugins()
 
 	if [ $WINDOWS -eq 1 ]; then
 
-		libs=$(ldd El_Maven* peakdetector.exe)
+		libs=$(ldd El-MAVEN.exe peakdetector.exe)
 		if [ $? != 0 ]; then
 			return -1
 		fi;
@@ -162,9 +162,6 @@ collect_runtime_plugins()
         		cp $lib $BIN
     		fi;
 		done <<< "$libs"
-
-
-		mv El_Maven* ElMaven.exe
 
 
                 # since Qt5.9.7, windeployqt has stopped working. Going to use some copy paste magic instead
@@ -178,7 +175,7 @@ collect_runtime_plugins()
                 cp -r "$qt_plugins_path/printsupport" .
                 cp -r "$qt_plugins_path/sqldrivers" .
                 cp -r "$qt_plugins_path/bearer" .
-                #windeployqt.exe --no-translations ElMaven.exe &>/dev/null
+                #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
                 #if [ $? != 0 ]; then
                 #	return -1
                 #fi;
@@ -199,9 +196,8 @@ strip_upload_symbols()
 	echo "stripping symbols"
 
 	if [ $WINDOWS -eq 1 ]; then
-		$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS ElMaven.exe ElMaven
-		rm ElMaven.pdb
-		rm -r symbols
+		$BREAKPAD_TOOLS/windows/strip_symbols.sh $BREAKPAD_TOOLS El-MAVEN.exe El-MAVEN
+		rm El-MAVEN.pdb
 	fi;
 
 	if [ $MAC -eq 1 ]; then

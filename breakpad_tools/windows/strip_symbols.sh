@@ -4,7 +4,6 @@ binary_name=$3
 pdb_file="$binary_name.pdb"
 symbol_file="$binary_name.sym"
 
-chmod +x dump_syms
 
 $BIN_PATH/windows/cv2pdb.exe "$binary_name.exe"
 
