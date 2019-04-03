@@ -9,4 +9,7 @@
     <Default>true</Default>
     <ForcedInstallation>true</ForcedInstallation>
     <Script>installerscript.qs</Script>
+    <UserInterfaces>
+        <UserInterface>policy.ui</UserInterface>
+    </UserInterfaces>
 </Package>

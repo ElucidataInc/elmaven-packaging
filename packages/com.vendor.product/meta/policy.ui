@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PolicyPage</class>
+ <widget class="QWidget" name="PolicyPage">
+  <property name="objectName">
+   <string>PolicyPage</string>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>412</width>
+    <height>179</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+    <string>Privacy Policy</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTextEdit" name="textBox">
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="acceptButton">
+    <property name="text">
+     <string>I accept</string>
+    </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="rejectButton">
+    <property name="text">
+     <string>I do not accept</string>
+    </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
