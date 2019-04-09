@@ -13,13 +13,12 @@ Component.prototype.createOperationsForArchive = function(archive)
 
 Component.prototype.createOperations = function()
 {
-
     component.createOperations();
-    component.addOperation("CreateShortcut","@TargetDir@" + "/" + installer.value("version") + "/bin/ElMaven.exe", 
-            "@DesktopDir@/@version@.lnk");
-    // if(systemInfo.productType === "windows") {
-    //     component.addOperation("CreateShortcut","@TargetDir@" + "/" + installer.value("version") + "/bin/ElMaven.exe", 
-    //         "@DesktopDir@/@version@.lnk");
-    // }
+    if(systemInfo.productType === "windows") {
+        component.addOperation("CreateShortcut",
+                               "@TargetDir@" + "/" + installer.value("version") + "/bin/El-MAVEN.exe",
+                               "@DesktopDir@/El-MAVEN.lnk",
+                               "description=El-MAVEN");
+     }
 }
 
