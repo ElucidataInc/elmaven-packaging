@@ -176,6 +176,7 @@ collect_runtime_plugins()
         cp -r "$qt_plugins_path/printsupport" .
         cp -r "$qt_plugins_path/sqldrivers" .
         cp -r "$qt_plugins_path/bearer" .
+        cp -r "$qt_plugins_path/mediaservice" .
         #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
         #if [ $? != 0 ]; then
         #       return -1
