@@ -292,7 +292,7 @@ create_installer()
     cd $PARENT_DIR
 
     if [ $MAC -eq 1 ]; then
-        binarycreator --ignore-translations -c config/config.xml -p packages/ $INSTALLER &>/dev/null
+        binarycreator --ignore-translations -r extras.qrc -c config/config.xml -p packages/ $INSTALLER &>/dev/null
         if [ $? != 0 ]; then
             ERROR_MSG="Make sure binarycreator is in system path"
             return -1
@@ -300,7 +300,7 @@ create_installer()
     fi;
 
     if [ $WINDOWS -eq 1 ]; then
-        binarycreator -c config/config.xml -p packages/ $INSTALLER &>/dev/null
+        binarycreator -r extras.qrc-c config/config.xml -p packages/ $INSTALLER &>/dev/null
         if [ $? != 0 ]; then
             ERROR_MSG="Make sure binarycreator is in system path"
             return -1
