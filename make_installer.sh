@@ -301,7 +301,7 @@ create_installer()
     fi;
 
     if [ $WINDOWS -eq 1 ]; then
-        binarycreator -r extras.qrc-c config/config.xml -p packages/ $INSTALLER &>/dev/null
+        binarycreator -r extras.qrc -c config/config.xml -p packages/ $INSTALLER &>/dev/null
         if [ $? != 0 ]; then
             ERROR_MSG="Make sure binarycreator is in system path"
             return -1
