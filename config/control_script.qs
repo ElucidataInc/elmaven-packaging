@@ -19,7 +19,7 @@ Controller.prototype.DynamicPolicyPageCallback = function()
 {
     console.log("creating privacy policy page")
     var page = gui.pageByObjectName("DynamicPolicyPage")
-    var policyTxt = installer.readFile(":/metadata/config/privacypolicy.txt", "UTF-8")
+    var policyTxt = installer.readFile(":/metadata/config/privacypolicy.html", "UTF-8")
     page.PolicyPage.textBox.setText(policyTxt)
     page.complete = false
 }

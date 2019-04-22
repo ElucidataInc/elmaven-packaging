@@ -1,5 +1,5 @@
 <RCC>
    <qresource>
-    <file>config/privacypolicy.txt</file>
+    <file>config/privacypolicy.html</file>
    </qresource>
 </RCC>
