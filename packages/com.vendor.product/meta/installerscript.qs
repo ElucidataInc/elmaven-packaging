@@ -3,6 +3,8 @@ function Component()
     console.log("initializing component")
     installer.setDefaultPageVisible(QInstaller.ReadyForInstallation, false) 
     installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false)
+    installer.addWizardPage(component, "PolicyPage", QInstaller.PerformInstallation)
+    gui.pageByObjectName("DynamicPolicyPage").entered.connect(enteredPolicyPage)
 }
 
 Component.prototype.createOperationsForArchive = function(archive)
@@ -22,3 +24,23 @@ Component.prototype.createOperations = function()
      }
 }
 
+enteredPolicyPage = function()
+{
+    console.log("entered policy page")
+    var page = gui.currentPageWidget().PolicyPage;
+    page.acceptButton.toggled.connect(policyAccepted);
+    page.rejectButton.toggled.connect(policyRejected);
+    page.rejectButton.setChecked(true)
+}
+
+policyAccepted = function()
+{
+    var wizard = gui.currentPageWidget();
+    wizard.complete = true
+}
+
+policyRejected = function()
+{
+    var wizard = gui.currentPageWidget();
+    wizard.complete = false
+}
