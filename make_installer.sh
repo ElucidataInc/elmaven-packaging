@@ -168,6 +168,11 @@ collect_runtime_plugins()
         # since Qt5.9.7, windeployqt has stopped working. Going to use some copy paste magic instead
         # to get all the extra plugins required.
 
+        #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
+        #if [ $? != 0 ]; then
+        #       return -1
+        #fi;
+
         qt_plugins_path=$(qmake -query QT_INSTALL_PLUGINS)
         echo $qt_plugins_path
 
@@ -177,10 +182,9 @@ collect_runtime_plugins()
         cp -r "$qt_plugins_path/sqldrivers" .
         cp -r "$qt_plugins_path/bearer" .
         cp -r "$qt_plugins_path/mediaservice" .
-        #windeployqt.exe --no-translations El-MAVEN.exe &>/dev/null
-        #if [ $? != 0 ]; then
-        #       return -1
-        #fi;
+
+        # QtNetwork module requires extra ssl dlls to work
+        cp ../libs/OpenSSL/* $PWD
 
         #generate qt.conf
         touch qt.conf
@@ -350,7 +354,6 @@ if [ $? != 0 ]; then
 else
     echo "collecting plugins $success"
 fi;
-
 
 strip_upload_symbols
 
