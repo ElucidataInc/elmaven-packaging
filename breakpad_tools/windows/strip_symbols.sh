@@ -19,3 +19,5 @@ mv $symbol_file ../symbols/"$binary_name.pdb"/$uuid/
 chmod +x $BIN_PATH/windows/sentry-cli.exe 
 
 $BIN_PATH/windows/sentry-cli --auth-token 00985397724343d496af4d0f88dd8c79adc5f7a5433b4ed9881b9535d0bc5eb4 upload-dif -t breakpad --project el-maven-logging --org el-maven ../symbols/
+
+exit 0
