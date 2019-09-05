@@ -1,6 +1,9 @@
 function Component()
 {
     console.log("initializing component")
+    if (installer.isInstaller())
+        installer.setValue("AllUsers", true);
+
     installer.setDefaultPageVisible(QInstaller.ReadyForInstallation, false) 
     installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false)
     installer.addWizardPage(component, "PolicyPage", QInstaller.PerformInstallation)
@@ -21,7 +24,17 @@ Component.prototype.createOperations = function()
                                "@TargetDir@" + "/" + installer.value("version") + "/bin/El-MAVEN.exe",
                                "@DesktopDir@/El-MAVEN.lnk",
                                "description=El-MAVEN");
-     }
+        component.addElevatedOperation("GlobalConfig",
+                                       "Elucidata",
+                                       installer.value("version"),
+                                       "InstallDir",
+                                       "@TargetDir@");
+        component.addElevatedOperation("GlobalConfig",
+                                       "Elucidata",
+                                       installer.value("version"),
+                                       "BinaryDir",
+                                       "@TargetDir@" + "\\" + installer.value("version") + "\\bin");
+    }
 }
 
 enteredPolicyPage = function()
