@@ -5,7 +5,9 @@ from datetime import datetime
 tree = ET.parse("config/config.xml")
 root = tree.getroot()
 version = sys.argv[1]
+update_branch = sys.argv[2]
 root.find("Version").text = version
+root.find("RemoteRepositories").find("Repository").find("Url").text = "https://bitbucket.org/saifulbeekhan/elmaven-updates/raw/{}".format(update_branch)
 tree.write("config/config.xml")
 
 tree = ET.parse("packages/com.vendor.product/meta/package.xml")
