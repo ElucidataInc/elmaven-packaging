@@ -9,4 +9,11 @@
     <ControlScript>control_script.qs</ControlScript>
     <WizardStyle>Modern</WizardStyle>
     <TargetDir>@ApplicationsDir@/El-MAVEN</TargetDir>
+    <RemoteRepositories>
+        <Repository>
+            <Url>https://localhost/repository</Url>
+            <Enabled>1</Enabled>
+            <DisplayName>El-MAVEN Updates</DisplayName>
+        </Repository>
+    </RemoteRepositories>
 </Installer>
