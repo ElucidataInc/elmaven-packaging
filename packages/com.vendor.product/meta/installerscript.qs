@@ -13,7 +13,7 @@ function Component()
 Component.prototype.createOperationsForArchive = function(archive)
 {
     console.log("performing custom extract operation")
-    component.addOperation("Extract", archive, "@TargetDir@" + "/" + installer.value("version") + "/");
+    component.addOperation("Extract", archive, "@TargetDir@" + "/" + installer.value("application") + "/");
 }
 
 Component.prototype.createOperations = function()
@@ -21,19 +21,19 @@ Component.prototype.createOperations = function()
     component.createOperations();
     if(systemInfo.productType === "windows") {
         component.addOperation("CreateShortcut",
-                               "@TargetDir@" + "/" + installer.value("version") + "/bin/El-MAVEN.exe",
+                               "@TargetDir@" + "/" + installer.value("application") + "/bin/El-MAVEN.exe",
                                "@DesktopDir@/El-MAVEN.lnk",
                                "description=El-MAVEN");
         component.addElevatedOperation("GlobalConfig",
                                        "Elucidata",
-                                       installer.value("version"),
+                                       installer.value("application") + " " + installer.value("version"),
                                        "InstallDir",
                                        "@TargetDir@");
         component.addElevatedOperation("GlobalConfig",
                                        "Elucidata",
-                                       installer.value("version"),
+                                       installer.value("application") + " " + installer.value("version"),
                                        "BinaryDir",
-                                       "@TargetDir@" + "\\" + installer.value("version") + "\\bin");
+                                       "@TargetDir@" + "\\" + installer.value("application") + "\\bin");
     }
 }
 

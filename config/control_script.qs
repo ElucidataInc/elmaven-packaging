@@ -2,9 +2,9 @@ function Controller()
 {
     console.log("intializing controller")
     if(installer.isInstaller()) {
-        installer.setValue("version", "@Name@-@Version@")
+        installer.setValue("application", "@Name@")
+        installer.setValue("version", "@Version@")
     }
-
 }
 
 Controller.prototype.IntroductionPageCallback = function()
