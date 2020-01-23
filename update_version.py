@@ -5,9 +5,9 @@ from datetime import datetime
 tree = ET.parse("config/config.xml")
 root = tree.getroot()
 version = sys.argv[1]
-update_branch = sys.argv[2]
+update_repo_url = sys.argv[2]
 root.find("Version").text = version
-root.find("RemoteRepositories").find("Repository").find("Url").text = "https://elmaven-installers.s3-us-west-2.amazonaws.com/{}-updates".format(update_branch)
+root.find("RemoteRepositories").find("Repository").find("Url").text = update_repo_url
 tree.write("config/config.xml")
 
 tree = ET.parse("packages/com.vendor.product/meta/package.xml")
