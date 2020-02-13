@@ -1,12 +1,19 @@
 <Installer>
     <Name>El-MAVEN</Name>
-    <Version>0.2.4</Version>
+    <Version>x.y.z</Version>
     <Title>El-MAVEN Installer</Title>
     <Publisher>ElucidataInc</Publisher>
-    <ProductUrl>https://elucidatainc.github.io/ElMaven/</ProductUrl>
+    <ProductUrl>https://resources.elucidata.io/elmaven</ProductUrl>
     <InstallerApplicationIcon>maven</InstallerApplicationIcon>
     <InstallerWindowIcon>window.png</InstallerWindowIcon>
     <ControlScript>control_script.qs</ControlScript>
     <WizardStyle>Modern</WizardStyle>
     <TargetDir>@ApplicationsDir@/El-MAVEN</TargetDir>
+    <RemoteRepositories>
+        <Repository>
+            <Url>https://localhost/repository</Url>
+            <Enabled>1</Enabled>
+            <DisplayName>El-MAVEN Updates</DisplayName>
+        </Repository>
+    </RemoteRepositories>
 </Installer>
