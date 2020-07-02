@@ -2,7 +2,7 @@
     <Name>El-MAVEN</Name>
     <Version>x.y.z</Version>
     <Title>El-MAVEN Installer</Title>
-    <Publisher>ElucidataInc</Publisher>
+    <Publisher>Elucidata Inc.</Publisher>
     <ProductUrl>https://resources.elucidata.io/elmaven</ProductUrl>
     <InstallerApplicationIcon>maven</InstallerApplicationIcon>
     <InstallerWindowIcon>window.png</InstallerWindowIcon>
